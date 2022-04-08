@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {Banner} from "../components/banner";
+import {NavBar} from "../components/nav";
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +13,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Netflix</h1>
-
+        <NavBar props={{
+            userName:"me"
+        }}/>
         <Banner props={
             {
                 title:"Clifford the red dog1",
@@ -20,7 +23,7 @@ const Home: NextPage = () => {
                 imgUrl:"/static/clifford.webp"
             }}/>
 
-        {/*<NavBar/>*/}
+
         {/*<Card/>*/}
     </div>
   )
