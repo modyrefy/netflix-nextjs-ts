@@ -2,10 +2,18 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {Banner} from "../components/banner";
-import {NavBar} from "../components/nav";
-import {Card} from "../components/card/card";
+import {NavBar} from "../components/nav"
+import {SectionCards} from "../components/card/sectionCards";
+import {VideoRequestModel} from "../models";
 
 const Home: NextPage = () => {
+    const disneyVideos:VideoRequestModel[]=[
+        {id:"1", imgUrl:"/static/clifford.webp"},
+        {id:"1", imgUrl:"/static/clifford.webp"},
+        {id:"1", imgUrl:"/static/clifford.webp"},
+        {id:"1", imgUrl:"/static/clifford.webp"},
+        {id:"1", imgUrl:"/static/clifford.webp"},
+    ];
     return (
         <div className={styles.container}>
             <Head>
@@ -23,11 +31,10 @@ const Home: NextPage = () => {
                         subTitle: "a very cute dog",
                         imgUrl: "/static/clifford.webp"
                     }}/>
-
-
-                <Card props={{imgUrl : "/static/clifford.webp",size : "large",id:0,shouldScale : true,}}/>
-                <Card props={{imgUrl : "/static/clifford.webp",size : "medium",id:0,shouldScale : true,}}/>
-                <Card props={{imgUrl : "/static/clifford.webp",size : "small",id:0,shouldScale : true,}}/>
+                <div className={styles.sectionWrapper}>
+                <SectionCards
+                    props={{title: "test title 1", videos: disneyVideos, size: "large", shouldScale: true, shouldWrap: true}}/>
+                </div>
             </div>
         </div>
     )

@@ -12,16 +12,23 @@ export const Card:FC<{props:CardRequestModel}>=({props})=> {
             "https://images.unsplash.com/photo-1485846234645-a62644f84728?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1340&q=80"
         );
     }
+    const scale = props.id === 0 ? { scaleY: 1.1 } : { scale: 1.1 };
+
+    const shouldHover = props.shouldScale && {
+        whileHover: { ...scale },
+    };
     const classMap = {
         large: styles.lgItem,
         medium: styles.mdItem,
         small: styles.smItem,
     };
+    // @ts-ignore
     return(
         <div className={styles.container}>
             <motion.div
                 className={cls(styles.imgMotionWrapper, classMap[props.size])}
-                {...props.shouldScale}
+                {...shouldHover}
+                //whileHover={{scaleY:1.1}}
             >
             <Image
                 src={imgSrc}
