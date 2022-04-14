@@ -4,7 +4,7 @@ import {BannerRequestModel} from "../../models";
 import styles from './banner.module.css';
  export const Banner:FC<{props:BannerRequestModel}>=({props})=> {
 //export const Banner:FC<{}>=(props)=>{
-     console.log('props', props)
+    //console.log('props', props)
      //const{request}=props;
      return (<div className={styles.container}>
          <div className={styles.leftWrapper}>

@@ -1,19 +1,20 @@
-import type { NextPage } from 'next'
+import type {GetServerSideProps, NextPage} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {Banner} from "../components/banner";
 import {NavBar} from "../components/nav"
 import {SectionCards} from "../components/card/sectionCards";
 import {VideoRequestModel} from "../models";
+import {getPopularVideos, getVideos} from "../lib/videos";
 
-const Home: NextPage = () => {
-    const disneyVideos:VideoRequestModel[]=[
-        {id:"1", imgUrl:"/static/clifford.webp"},
-        {id:"1", imgUrl:"/static/clifford.webp"},
-        {id:"1", imgUrl:"/static/clifford.webp"},
-        {id:"1", imgUrl:"/static/clifford.webp"},
-        {id:"1", imgUrl:"/static/clifford.webp"},
-    ];
+export  const getServerSideProps: GetServerSideProps = async (context) => {
+    const disneyVideos: VideoRequestModel[] =await getVideos('disney trailer');
+    const productivityVideos: VideoRequestModel[]  = await getVideos("Productivity");
+    const travelVideos: VideoRequestModel[]  = await getVideos("indie music");
+    const popularVideos = await getPopularVideos();
+    return {props: {disneyVideos ,productivityVideos,travelVideos,popularVideos}};
+}
+const Home: NextPage = (props) => {
     return (
         <div className={styles.container}>
             <Head>
@@ -33,7 +34,13 @@ const Home: NextPage = () => {
                     }}/>
                 <div className={styles.sectionWrapper}>
                 <SectionCards
-                    props={{title: "test title 1", videos: disneyVideos, size: "large", shouldScale: true, shouldWrap: true}}/>
+                    props={{title: "Disney", videos: props.disneyVideos, size: "large", shouldScale: true, shouldWrap: true}}/>
+                    <SectionCards
+                        props={{title: "Travel", videos: props.travelVideos, size: "small", shouldScale: true, shouldWrap: true}}/>
+                    <SectionCards
+                        props={{title: "Productivity", videos: props.productivityVideos, size: "medium", shouldScale: true, shouldWrap: true}}/>
+                    <SectionCards
+                        props={{title: "Popular", videos: props.popularVideos, size: "small", shouldScale: true, shouldWrap: true}}/>
                 </div>
             </div>
         </div>

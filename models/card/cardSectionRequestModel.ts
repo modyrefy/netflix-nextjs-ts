@@ -7,6 +7,7 @@ export interface CardSectionRequestModel{
 }
 export  interface VideoRequestModel{
     id:string,
+    title?:string,
     imgUrl:string,
 
 }
