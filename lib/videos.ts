@@ -13,7 +13,7 @@ export const getCommonVideos=async (url:string): Promise<VideoRequestModel[]> =>
         );
         const data = await response.json();
         if (data?.error) {
-            console.error("Youtube API error", data.error);
+          //  console.error("Youtube API error", data.error);
             return [];
         }
         //if(data !=null && data.items!=null && data.items.length!=0) {
