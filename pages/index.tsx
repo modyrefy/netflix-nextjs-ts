@@ -7,6 +7,7 @@ import {SectionCards} from "../components/card/sectionCards";
 import {VideoRequestModel} from "../models";
 import {getPopularVideos, getVideos} from "../lib/videos";
 
+
 export  const getServerSideProps: GetServerSideProps = async (context) => {
     const disneyVideos: VideoRequestModel[] =await getVideos('disney trailer');
     const productivityVideos: VideoRequestModel[]  = await getVideos("Productivity");
@@ -15,6 +16,7 @@ export  const getServerSideProps: GetServerSideProps = async (context) => {
     return {props: {disneyVideos ,productivityVideos,travelVideos,popularVideos}};
 }
 const Home: NextPage = (props) => {
+    //console.log('magic',magic)
     return (
         <div className={styles.container}>
             <Head>
@@ -23,9 +25,7 @@ const Home: NextPage = (props) => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div className={styles.main}>
-                <NavBar props={{
-                    userName: "me@me.com"
-                }}/>
+                <NavBar />
                 <Banner props={
                     {
                         title: "Clifford the red dog1",

@@ -1,10 +1,47 @@
-import {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {NavBarRequestModel} from "../../models";
 import styles from "./navbar.module.css";
 import Link from 'next/link'
 import Image from "next/image";
-export const NavBar:FC<{props:NavBarRequestModel}>=({props})=> {
-    const [showDropdown, setShowDropdown] = useState(false);
+import {useRouter} from "next/router";
+import {magic} from "../../lib/magic-client";
+import {isAwaitExpression} from "tsutils";
+export const NavBar:FC<{}>=({})=> {
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [username, setUsername] = useState<string>("");
+    const [didToken, setDidToken] = useState<string>("");
+    const router = useRouter();
+    // @ts-ignore
+    useEffect( () => {
+        const getData = async () => {
+            try {
+                // @ts-ignore
+                const {email, issuer} = await magic.user.getMetadata();
+                console.log('email',email);
+                // @ts-ignore
+                const didToken = await magic.user.getIdToken();
+                if (email) {
+                    setUsername(email);
+                    setDidToken(didToken);
+                }
+            } catch (error) {
+                console.error("Error retrieving email", error);
+            }
+
+        }
+        getData();
+    }, []);
+    const handleSignout =async (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+
+        try {
+            // @ts-ignore
+            await magic.user.logout();
+        } catch (error) {
+            console.error("Error logging out", error);
+            router.push("/login");
+        }
+    };
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
@@ -37,7 +74,7 @@ export const NavBar:FC<{props:NavBarRequestModel}>=({props})=> {
                 <nav className={styles.navContainer}>
                     <div>
                         <button className={styles.usernameBtn} onClick={() => setShowDropdown(!showDropdown)}>
-                            <p className={styles.username}>{props.userName}</p>
+                            <p className={styles.username}>{username}</p>
                             <Image
                                 src={"/static/expand_more.svg"}
                                 alt="Expand dropdown"
@@ -49,7 +86,7 @@ export const NavBar:FC<{props:NavBarRequestModel}>=({props})=> {
                         <div className={styles.navDropdown}>
                             <div>
                                 <Link href="/login">
-                                    <a className={styles.linkName}>Sign out</a>
+                                    <a className={styles.linkName} onClick={handleSignout}>Sign out</a>
                                 </Link>
                                 <div className={styles.lineWrapper}></div>
                             </div>

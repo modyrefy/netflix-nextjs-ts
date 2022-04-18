@@ -18,7 +18,7 @@ export const getCommonVideos=async (url:string): Promise<VideoRequestModel[]> =>
         }
         //if(data !=null && data.items!=null && data.items.length!=0) {
         data?.items?.map((row: any, index: number) => {
-            console.log(index, row.id);
+            //console.log(index, row.id);
             result.push(
                 {
                    // id: row.id.videoId != null && row.id.videoId != undefined ? row.id.videoId : index.toString(),// row?.id?.videoId,

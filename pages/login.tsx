@@ -5,12 +5,25 @@ import Link from "next/link";
 import styles from "../styles/Login.module.css";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-
+import {magic} from "../lib/magic-client";
 const Login: NextPage = (props) => {
     const [email, setEmail] = useState<string>("");
     const [userMsg, setUserMsg] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
+
+    useEffect(() => {
+        const handleComplete = () => {
+            setIsLoading(false);
+        };
+        router.events.on("routeChangeComplete", handleComplete);
+        router.events.on("routeChangeError", handleComplete);
+
+        return () => {
+            router.events.off("routeChangeComplete", handleComplete);
+            router.events.off("routeChangeError", handleComplete);
+        };
+    }, [router]);
 
     const handleOnChangeEmail = (event:React.ChangeEvent<HTMLInputElement>) => {
         setUserMsg("");
@@ -18,20 +31,25 @@ const Login: NextPage = (props) => {
         setEmail(email);
     };
 
-    const handleLoginWithEmail=(event:React.MouseEvent<HTMLButtonElement>)=>{
+    const handleLoginWithEmail=async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (email) {
             // log in a user by their email
             try {
                 setIsLoading(true);
+                // @ts-ignore
+                const dldToken = await magic.auth.loginWithMagicLink({email: email});
 
-            }catch (error) {
+                if(dldToken) {
+                    //console.log('dldToken', dldToken)
+                    setIsLoading(false);
+                }
+            } catch (error) {
                 // Handle errors if required!
                 console.error("Something went wrong logging in", error);
                 setIsLoading(false);
             }
-        }
-        else {
+        } else {
             // show user message
             setIsLoading(false);
             setUserMsg("Enter a valid email address");
