@@ -28,6 +28,7 @@ const Home: NextPage = (props) => {
                 <NavBar />
                 <Banner props={
                     {
+                        videoId:"AbjDUpvSHV4",
                         title: "Clifford the red dog1",
                         subTitle: "a very cute dog",
                         imgUrl: "/static/clifford.webp"
