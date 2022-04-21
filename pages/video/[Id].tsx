@@ -1,10 +1,36 @@
-import {NextPage} from "next";
+import {GetStaticPaths, GetStaticProps, NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "../../styles/Video.module.css";
 import clsx from "classnames";
+import {getYoutubeVideoById} from "../../lib/videos";
+import {NavBar} from "../../components/nav";
+
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
+    const paths = listOfVideos.map((videoId) => ({
+        params: { Id:videoId },
+    }));
+
+    return { paths: paths, fallback: "blocking" };
+    //https://stackoverflow.com/questions/65783199/error-getstaticpaths-is-required-for-dynamic-ssg-pages-and-is-missing-for-xxx
+    //paths: [],
+}
+export  const getStaticProps:GetStaticProps  = async(context)=> {
+    //console.log('context.params',context.params)
+    const videoId:string=context.params.Id;
+    const videoArray = await getYoutubeVideoById(videoId);
+    return {
+        props: {
+            video: videoArray.length > 0 ? videoArray[0] : {},
+        },
+        revalidate: 10, // In seconds
+    };
+}
+
 const Video: NextPage = (props) => {
     const router=useRouter();
     const [show, setShow] = useState(false);
@@ -26,6 +52,9 @@ const Video: NextPage = (props) => {
         const favourited = val ? 1 : 0;
         //const response = await runRatingService(favourited);
     };
+
+
+
     useEffect(()=>{
         setShow(true);
     },[])
@@ -34,6 +63,7 @@ const Video: NextPage = (props) => {
         {/*    Launch demo modal*/}
         {/*</Button>*/}
         <div className={styles.container}>
+            <NavBar />
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>
